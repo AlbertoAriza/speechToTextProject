@@ -3,9 +3,17 @@ let audioChunks = [];
 let audioURL;
 let audioBlob;
 
+const $ = (element)=> document.querySelector(element);
+
+let getStartRecording = $('#btn-startRecording');
+let getPlayRecording = $('#playbackButton');
+let getTranscribeButton = $('#transcribeButton');
+
+
 // Function to start recording
 async function startRecording() {
     try {
+        getStartRecording.classList.toggle("btnInUse");
         // Access user media (microphone)
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         mediaRecorder = new MediaRecorder(stream);
@@ -19,17 +27,31 @@ async function startRecording() {
             audioURL = URL.createObjectURL(audioBlob)
             audioChunks = []; // Clear the chunks for next recording
             // Proceed with transcription here
-            transcribeAudio();
+            //transcribeAudio();
+
+            // Habilitar el botón de reproducción
+            document.getElementById('playbackButton').disabled = false;
         };
 
         mediaRecorder.start();
         console.log('Recording started');
+
+        // Stop recording after 3 seconds
+        setTimeout(() => {
+            getPlayRecording.classList.toggle("btnDisabled");
+            getStartRecording.classList.toggle("btnInUse");
+            if (mediaRecorder.state === "recording") {
+                mediaRecorder.stop();
+                console.log('Recording stopped automatically after 3 seconds');
+            }
+        }, 3000); // 3000 ms = 3 seconds
+
     } catch (error) {
         console.error('Error starting recording:', error);
     }
 }
 
-// Function to stop recording
+/* Function to stop recording
 function stopRecording() {
     if (mediaRecorder) {
         mediaRecorder.stop();
@@ -38,15 +60,32 @@ function stopRecording() {
         console.warn('No active recording to stop');
     }
 }
+*/
+
+// Function to play the recording
+function playRecording() {
+    if (audioURL) {
+        getPlayRecording.classList.toggle("btnInUse");
+        const audioElement = new Audio(audioURL);
+        audioElement.play();
+        console.log('Playing recording');
+        setTimeout(()=>{
+            getPlayRecording.classList.toggle("btnInUse");
+            // Habilitar el botón para enviar la grabación a la API después de la reproducción
+            getTranscribeButton.disabled = false;
+            getTranscribeButton.classList.toggle("btnDisabled");
+        }, 3000)
+
+    } else {
+        console.warn('No recording available to play');
+    }
+}
+
 
 // → AQUÍ HE ARREGLADO EL CÓDIGO Y AHORA YA MANDA EL ARCHIVO A ASSEMBLY AI CORRECTAMENTE.
 // Function to handle transcription and comparison
 async function transcribeAudio() {
     try {
-        console.log('Uploading audio...');
-        const formData = new FormData();
-        formData.append('file', audioBlob); // Ensure file name and MIME type match
-
         // Check audio blob type
         console.log(`Audio Blob Type: ${audioBlob.type}`);
 

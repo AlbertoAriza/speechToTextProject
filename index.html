@@ -15,8 +15,11 @@
     </div>
     
     <!-- Buttons to start and stop recording -->
-    <button onclick="startRecording()">Start Recording</button>
-    <button onclick="stopRecording()">Stop Recording</button>
+    <button id="btn-startRecording" onclick="startRecording()">Start Recording</button>
+    <!--<button onclick="stopRecording()">Stop Recording</button>-->
+    <button class="btnDisabled" id="playbackButton" onclick="playRecording()" disabled>Play Recording</button> <!-- Botón de reproducción -->
+    <button class="btnDisabled" id="transcribeButton" onclick="transcribeAudio()" disabled>Check Pronunciation</button> <!-- Nuevo botón para enviar a la API -->
+
 
     <!-- Container for audio playback -->
     <div id="audioPlayback"></div>

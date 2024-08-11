@@ -24,6 +24,16 @@ button:hover {
     background-color: #0056b3;
 }
 
+.btnInUse{
+    background-color: orange;
+}
+.btnInUse:hover{
+    background-color: orangered;
+}
+.btnDisabled{
+    background-color: gray;
+}
+
 #audioPlayback {
     margin-top: 20px;
 }
