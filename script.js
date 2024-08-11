@@ -39,6 +39,7 @@ function stopRecording() {
     }
 }
 
+// → AQUÍ HE ARREGLADO EL CÓDIGO Y AHORA YA MANDA EL ARCHIVO A ASSEMBLY AI CORRECTAMENTE.
 // Function to handle transcription and comparison
 async function transcribeAudio() {
     try {
@@ -54,7 +55,7 @@ async function transcribeAudio() {
             headers: {
                 'Authorization': '00851f1dd9334c58b62af06ef21c7de5',
             },
-            body: audioBlob,
+            body: audioBlob, // ESTE ES EL ARREGLO QUE HE HECHO. LO QUE SUBO ES DIRECTAMENTE EL OBJETO BLOB QUE HE CREADO CON LA GRABACIÓN.
         });
 
         if (!uploadResponse.ok) {
